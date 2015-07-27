@@ -1,5 +1,7 @@
 #include "Arduino.h"
 #include "Servo_Jump.h"
+#include <Servo.h>
+
 
 Servo_Jump::Servo_Jump(int interval, int position, int jitter)
 {
@@ -7,30 +9,38 @@ Servo_Jump::Servo_Jump(int interval, int position, int jitter)
       targetPosition = position;
       servoJitter = jitter;
       increment = 1;
+      enabled = 0;
 }
 
-void Attach(int pin)
+void Servo_Jump::Enable()
 {
+  enabled = 1;
+  lastUpdate = millis();
+}
+
+void Servo_Jump::Attach(int pin)
+{
+  Servo servo;
   servo.attach(pin);
 }
 
-void Detach()
+void Servo_Jump::Detach()
 {
   servo.detach();
 }
 
-void Update()
+void Servo_Jump::Update()
 {
   if( enabled && (millis() - lastUpdate() > updateInterval))
   {
     lastUpdate = millis();
-    jitter = random(servoJitter);
+    currentJitter = random(servoJitter);
 
-    pos += increment + jitter - (jitter / 2);
-    servo.write(pos);
-    if((pos >= targetPosition - jitter) && (pos <= targetPosition + jitter))
+    nextPos += increment + currentJitter - (currentJitter / 2);
+    servo.write(nextPos);
+    if((nextPos >= targetPosition - currentJitter) && (nextPos <= targetPosition + currentJitter))
     {
-      servo.write(target_Position);
+      servo.write(targetPosition);
     }
   }
 }
