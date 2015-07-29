@@ -36,7 +36,7 @@ void Servo_Jump::Detach()
 
 void Servo_Jump::Update()
 {
-  if( enabled && (millis() - lastUpdate > updateInterval))
+  if( enabled && (int (millis() - lastUpdate) > updateInterval))
   {
     lastUpdate = millis();
     currentJitter = random(servoJitter);
