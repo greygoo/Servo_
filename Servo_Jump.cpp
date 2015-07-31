@@ -3,14 +3,16 @@
 #include <../Servo/Servo.h>
 
 
-Servo_Jump::Servo_Jump(int interval, int position, int jitter)
+Servo_Jump::Servo_Jump(int interval, int start, int position, int dur)
 {
       Servo servo;
       updateInterval = interval;
       targetPosition = position;
-      servoJitter = jitter;
+      duration = dur;
       increment = 1;
+      prevMillis = 0;
       enabled = 0;
+      nextPos = start;
 }
 
 void Servo_Jump::JumpTo(int pos)
@@ -36,18 +38,22 @@ void Servo_Jump::Detach()
 
 void Servo_Jump::Update()
 {
-  if( enabled && (int (millis() - lastUpdate) > updateInterval))
-  {
-    lastUpdate = millis();
-    currentJitter = random(servoJitter);
+  currentMillis = millis();
 
-    nextPos += increment + currentJitter - (currentJitter / 2);
+  if ( enabled && \
+       currentMillis - prevMillis >= duration && \
+       nextPos >= targetPosition - 90 && \
+       nextPos <= targetPosition + 90)
+  {
+    enabled = 0;
+    prevMillis = currentMillis;
+    servo.write(targetPosition);
+  }
+
+  if(enabled && (currentMillis - lastUpdate) > updateInterval)
+  {
+    lastUpdate = currentMillis;
+    nextPos = random(180);
     servo.write(nextPos);
-    if((nextPos >= targetPosition - currentJitter) && (nextPos <= targetPosition + currentJitter))
-    {
-      // move servo to final position and stop moving
-      servo.write(targetPosition);
-      enabled = 0;
-    }
   }
 }

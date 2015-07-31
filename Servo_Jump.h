@@ -13,22 +13,23 @@ Arduin IDE nclude it while linking */
 class Servo_Jump
 {
   public:
-    Servo_Jump(int interval, int position, int jitter);
+    Servo_Jump(int interval, int start, int position, int dur);
     void JumpTo(int pos);
     void Enable();
     void Attach(int pin);
     void Detach();
+    bool enabled;
     void Update();
+    int nextPos;
+    int targetPosition;
   private:
     Servo servo;
+    int duration;
     int updateInterval;
-    int targetPosition;
-    int servoJitter;
-    int currentJitter;
-    int nextPos;
     int increment;
-    bool enabled;
     long lastUpdate;
+    long currentMillis;
+    long prevMillis;
 };
 
 #endif

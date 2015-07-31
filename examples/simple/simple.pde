@@ -1,12 +1,12 @@
 #include <Servo.h>
 #include <Servo_Jump.h>
 
-Servo_Jump s(100, 13, 30);
+Servo_Jump s(200, 0, 180, 5000);
 
 void setup()
 {
   s.Attach(3);
-  s.JumpTo(180);
+  s.Enable();
 }
 
 void loop()
