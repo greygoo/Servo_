@@ -8,7 +8,7 @@
 #include <Arduino.h>
 /* Servo.h still needs to be included in the main sketch as otherwise the
 Arduin IDE nclude it while linking */
-#include "../Servo/Servo.h"
+#include <Servo.h>
 
 class Servo_Jump
 {
