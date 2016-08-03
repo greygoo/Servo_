@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Servo_Jump.h>
-#include <../Servo/Servo.h>
+#include <Servo.h>
 
 
 Servo_Jump::Servo_Jump(int interval, int start, int position, int dur)
